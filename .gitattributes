@@ -8,3 +8,11 @@
 *.pdf  filter=lfs diff=lfs merge=lfs -text
 *.pptx filter=lfs diff=lfs merge=lfs -text
 *.xlsx filter=lfs diff=lfs merge=lfs -text
+
+# Scripts shell => toujours LF
+*.sh text eol=lf
+
+# Dockerfiles et YAML => LF
+Dockerfile text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf

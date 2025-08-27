@@ -1,0 +1,4 @@
+# GPT_Project/ui/requirements.txt
+streamlit
+requests
+python-dotenv

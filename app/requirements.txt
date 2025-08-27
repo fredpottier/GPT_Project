@@ -1,0 +1,27 @@
+# === LLM orchestration & memory ===
+langgraph==0.6.6
+zep-python==2.0.2               # ⚠️ upgrade nécessaire
+openai==1.101.0                 # ⚠️ upgrade nécessaire
+
+# === Framework API & UI ===
+fastapi==0.116.1                # ⚠️ upgrade nécessaire
+uvicorn==0.30.3
+streamlit==1.48.1               # ⚠️ upgrade nécessaire
+
+# === Vector DB & embedding ===
+qdrant-client==1.15.1           # ⚠️ upgrade nécessaire
+tiktoken==0.7.0                 # OK
+langchain                      # non bloquant (facultatif)
+
+# === Dépendances système ===
+pydantic==2.8.2                 # OK
+pydantic-settings==2.2.1        # OK
+python-dotenv==1.0.1            # OK
+markdown-it-py==3.0.0           # OK
+
+# === Compatibilité httpx (fix temporaire) ===
+httpx==0.27.2                   # ⚠️ ⚠️ ⚠️ crucial : évite bugs avec OpenAI
+
+# === LangGraph Checkpointer (si utilisé) ===
+langgraph-checkpoint-postgres==2.0.23
+psycopg[binary,pool]>=3.2

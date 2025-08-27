@@ -1,0 +1,10 @@
+# Normaliser en LF côté repo, laisser Git convertir sur Windows si config core.autocrlf
+* text=auto
+
+# Option LFS pour binaires usuels (active LFS avant le 1er commit si tu veux)
+*.png  filter=lfs diff=lfs merge=lfs -text
+*.jpg  filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.pdf  filter=lfs diff=lfs merge=lfs -text
+*.pptx filter=lfs diff=lfs merge=lfs -text
+*.xlsx filter=lfs diff=lfs merge=lfs -text

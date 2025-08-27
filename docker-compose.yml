@@ -1,0 +1,97 @@
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: gpt_project-db-1
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gpt_net
+
+  zep:
+    image: ghcr.io/getzep/zep-cloud:0.27.2
+    container_name: gpt_project-zep-1
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      ZEP_NLP_SERVER_URL: "http://disabled"
+      ZEP_LOG_LEVEL: "info"
+      ZEP_DB_MIGRATE: "true"
+      # (évite ici ZEP_DB_DSN / STORE_TYPE / POSTGRES_* / PG* pour ne pas re-override)
+    volumes:
+      - ./data/zep:/data
+      - ./config/zep/config.yaml:/app/config.yaml:ro # ⬅️ clé du fix
+    ports:
+      - "8000:8000"
+    networks:
+      - gpt_net
+
+  qdrant:
+    image: qdrant/qdrant:v1.15.1
+    container_name: gpt_project-qdrant-1
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./data/qdrant:/qdrant/storage
+    networks:
+      - gpt_net
+
+  app:
+    build:
+      context: ./app
+      dockerfile: ../docker/app/Dockerfile
+    container_name: gpt_project-app-1
+    depends_on:
+      - qdrant
+      - zep
+    env_file:
+      - .env
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      ZEP_API_URL: ${ZEP_API_URL}
+      ZEP_API_KEY: ${ZEP_API_KEY}
+      APP_API_KEY: ${APP_API_KEY}
+      QDRANT_URL: ${QDRANT_URL}
+      QDRANT_COLLECTION: ${QDRANT_COLLECTION}
+      CHECKPOINT_PG_DSN: ${CHECKPOINT_PG_DSN}
+    volumes:
+      - ./app:/app
+      - ./data:/data
+    networks:
+      - gpt_net
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    container_name: gpt_project-ui-1
+    depends_on:
+      - app
+    env_file:
+      - .env
+    environment:
+      APP_URL: ${APP_URL}
+      APP_API_KEY: ${APP_API_KEY}
+    ports:
+      - "${APP_UI_PORT}:8501"
+    volumes:
+      - ./ui:/app
+    networks:
+      - gpt_net
+
+networks:
+  gpt_net:
+    driver: bridge

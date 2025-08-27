@@ -1,0 +1,45 @@
+# --- Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+venv/
+pip-wheel-metadata/
+
+# --- VS Code
+.vscode/
+.history/
+
+# --- Docker / Compose
+*.pid
+*.log
+logs/
+tmp/
+# volumes/data persistes (jetables)
+data/
+!data/.keep   # (si tu veux garder le dossier vide versionne)
+
+# --- Streamlit cache
+.ui_cache/
+.streamlit/
+
+# --- Notebooks / artefacts
+.ipynb_checkpoints/
+*.ipynb
+
+# --- OS
+.DS_Store
+Thumbs.db
+
+# --- Images / binaires lourds (si pas LFS)
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.pptx
+*.xlsx
+
+# --- Fichiers de tests temporaires
+verifZepPyhton.bat

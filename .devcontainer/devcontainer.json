@@ -1,0 +1,44 @@
+{
+    "name": "GPT_Project DevContainer",
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "../docker-compose.override.yml"
+    ],
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "runServices": [
+        "db",
+        "qdrant",
+        "zep",
+        "ui",
+        "app"
+    ],
+    "shutdownAction": "stopCompose",
+    "overrideCommand": false,
+    "remoteUser": "root",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "charliermarsh.ruff",
+                "ms-azuretools.vscode-docker",
+                "continue.continue"
+            ],
+            "settings": {
+                // 👉 Continue n’a plus besoin de configPath ici
+                "python.defaultInterpreterPath": "/usr/local/bin/python"
+            }
+        }
+    },
+    "containerEnv": {
+        "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}",
+        "MISTRAL_API_KEY": "${localEnv:MISTRAL_API_KEY}"
+    },
+    "forwardPorts": [
+        8000,
+        6333,
+        5432,
+        8501
+    ]
+}

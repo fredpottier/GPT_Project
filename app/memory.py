@@ -3,6 +3,9 @@ from zep_python import RoleType
 from settings import settings
 from typing import List, Dict
 
+import logging
+log = logging.getLogger(__name__)
+log.debug("Je suis dans memory.py")
 
 class ZepMemory:
     def __init__(self, session_id: str, project: str | None):
